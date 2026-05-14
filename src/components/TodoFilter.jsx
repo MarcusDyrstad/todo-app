@@ -1,15 +1,10 @@
-/**
- * TodoFilter
- * ----------
- * Three radio-style buttons: All / Active / Completed.
- * The active button is highlighted via the `is-active` class.
- *
- * Implemented as <button>s (not <a href="#...">) since this is purely
- * a client-side state change with no navigation.
- */
+/*
+  TodoFilter — three buttons: All / Active / Completed.
+  Stateless: the current filter lives in App.jsx.
+*/
 const FILTERS = [
-  { key: 'all', label: 'All' },
-  { key: 'active', label: 'Active' },
+  { key: 'all',       label: 'All' },
+  { key: 'active',    label: 'Active' },
   { key: 'completed', label: 'Completed' },
 ]
 

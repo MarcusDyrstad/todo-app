@@ -1,34 +1,30 @@
 import { useState } from 'react'
 
-// Priority options shown as a 3-pill button group inside the form.
 const PRIORITIES = [
-  { value: 'low',    label: 'Low' },
-  { value: 'medium', label: 'Med' },
+  { value: 'low',    label: 'Low'  },
+  { value: 'medium', label: 'Med'  },
   { value: 'high',   label: 'High' },
 ]
 
-/**
- * TodoForm
- * --------
- * Controlled input + priority picker + Add button.
- * onAdd is called with (text, priority); App validates the text.
- */
-export default function TodoForm({ onAdd, error, clearError }) {
-  const [value, setValue] = useState('')
-  const [priority, setPriority] = useState('medium') // default — most tasks
+export default function TodoForm({ onAdd, error, clearError, categories }) {
+  const [text, setText]             = useState('')
+  const [priority, setPriority]     = useState('medium')
+  const [categoryId, setCategoryId] = useState('')
+  const [dueDate, setDueDate]       = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const ok = onAdd(value, priority)
-    if (ok) {
-      setValue('')
-      // Note: we intentionally keep the priority pill where it is,
-      // so adding several "high"-priority tasks in a row is fast.
-    }
+    const ok = onAdd({
+      text,
+      priority,
+      categoryId: categoryId || null,
+      dueDate: dueDate || null,
+    })
+    if (ok) setText('')
   }
 
   const handleChange = (e) => {
-    setValue(e.target.value)
+    setText(e.target.value)
     if (error) clearError()
   }
 
@@ -39,7 +35,7 @@ export default function TodoForm({ onAdd, error, clearError }) {
           type="text"
           className="todo-form__input"
           placeholder="What needs to be done?"
-          value={value}
+          value={text}
           onChange={handleChange}
           aria-label="New task"
           aria-invalid={Boolean(error)}
@@ -50,13 +46,12 @@ export default function TodoForm({ onAdd, error, clearError }) {
         <button
           type="submit"
           className="todo-form__submit"
-          disabled={!value.trim()}
+          disabled={!text.trim()}
         >
           Add
         </button>
       </div>
 
-      {/* Priority picker — three small pills, one for each level. */}
       <div className="priority-picker" role="radiogroup" aria-label="Priority">
         <span className="priority-picker__label">Priority:</span>
         {PRIORITIES.map(({ value: v, label }) => {
@@ -76,6 +71,43 @@ export default function TodoForm({ onAdd, error, clearError }) {
             </button>
           )
         })}
+      </div>
+
+      <div className="todo-form__row">
+        <label className="todo-form__inline">
+          <span>Category:</span>
+          <select
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+            className="todo-form__select"
+          >
+            <option value="">None</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+        </label>
+
+        <label className="todo-form__inline">
+          <span>Due:</span>
+          <input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+            className="todo-form__date"
+          />
+          {dueDate && (
+            <button
+              type="button"
+              className="todo-form__clear"
+              onClick={() => setDueDate('')}
+              aria-label="Clear due date"
+              title="Clear due date"
+            >
+              ✕
+            </button>
+          )}
+        </label>
       </div>
 
       {error && (

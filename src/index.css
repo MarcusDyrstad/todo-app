@@ -1,8 +1,6 @@
 /* =========================================================
    Global resets and design tokens.
-   Themes are now driven by a `data-theme` attribute on <html>,
-   set explicitly by ThemeToggle — this lets users override the
-   system preference and have their choice persist across reloads.
+   Themes are driven by <html data-theme="..."> set by ThemeToggle.
    ========================================================= */
 
 *,
@@ -39,7 +37,6 @@ body {
   --color-text: #1f2937;
   --color-text-muted: #6b7280;
 
-  /* AmplifyOps brand orange replaces the old indigo accent */
   --color-primary: #f37021;
   --color-primary-hover: #d85c12;
   --color-primary-soft: rgba(243, 112, 33, 0.12);
@@ -48,12 +45,11 @@ body {
   --color-success: #10b981;
   --color-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 
-  /* Priority colors — used by badges and the left-edge accent */
-  --priority-low: #10b981;        /* green */
+  --priority-low: #10b981;
   --priority-low-soft: rgba(16, 185, 129, 0.15);
-  --priority-medium: #f59e0b;     /* amber */
+  --priority-medium: #f59e0b;
   --priority-medium-soft: rgba(245, 158, 11, 0.18);
-  --priority-high: #ef4444;       /* red */
+  --priority-high: #ef4444;
   --priority-high-soft: rgba(239, 68, 68, 0.16);
 
   --radius-sm: 6px;
@@ -88,7 +84,6 @@ body {
   --priority-high-soft: rgba(248, 113, 113, 0.2);
 }
 
-/* The gradient sits on the body — but only AFTER vars are defined */
 body {
   background-image: var(--color-bg-gradient);
 }
@@ -100,6 +95,7 @@ button {
 
 input,
 select,
-button {
+button,
+textarea {
   font-size: 1rem;
 }

@@ -1,9 +1,7 @@
-/**
- * TodoStats
- * ---------
- * Footer of the card. Shows how many items are left and offers the
- * "Clear completed" action. Pluralization is handled inline.
- */
+/*
+  TodoStats — bottom footer of the card.
+  Shows the active-items counter and a "Clear completed" button.
+*/
 export default function TodoStats({
   activeCount,
   completedCount,
@@ -20,7 +18,6 @@ export default function TodoStats({
         type="button"
         className="todo-stats__clear"
         onClick={onClearCompleted}
-        // Disabled when there's nothing to clear — prevents no-op clicks.
         disabled={completedCount === 0}
       >
         Clear completed

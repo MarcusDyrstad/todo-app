@@ -3,9 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 
-// Entry point — React 18's `createRoot` enables concurrent features
-// (e.g. automatic batching, transitions). StrictMode helps catch bugs
-// like unsafe lifecycles and accidental side effects during development.
+// React 18 entry point — mounts <App /> into <div id="root"> from index.html.
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />

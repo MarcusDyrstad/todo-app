@@ -1,28 +1,21 @@
 import TodoItem from './TodoItem.jsx'
 
-/**
- * TodoList
- * --------
- * Renders either the empty-state illustration or the filtered list.
- * The empty state now uses the AmplifyOps arrow mark instead of ✨.
- */
 export default function TodoList({
   todos,
+  categories,
   onToggle,
   onDelete,
-  onEdit,
-  onSetPriority,
+  onUpdate,
+  onAddSubtask,
+  onToggleSubtask,
+  onDeleteSubtask,
+  onUpdateSubtaskText,
   filter,
 }) {
   if (todos.length === 0) {
     return (
       <div className="empty-state" role="status">
-        <img
-          src={`${import.meta.env.BASE_URL}amplifyops-arrow.svg`}
-          alt=""
-          className="empty-state__icon"
-          aria-hidden="true"
-        />
+        <AmplifyOpsArrow />
         <p className="empty-state__text">{getEmptyMessage(filter)}</p>
       </div>
     )
@@ -34,23 +27,43 @@ export default function TodoList({
         <TodoItem
           key={todo.id}
           todo={todo}
+          categories={categories}
           onToggle={onToggle}
           onDelete={onDelete}
-          onEdit={onEdit}
-          onSetPriority={onSetPriority}
+          onUpdate={onUpdate}
+          onAddSubtask={onAddSubtask}
+          onToggleSubtask={onToggleSubtask}
+          onDeleteSubtask={onDeleteSubtask}
+          onUpdateSubtaskText={onUpdateSubtaskText}
         />
       ))}
     </ul>
   )
 }
 
+// Inline SVG so the empty-state logo always renders regardless of file paths.
+function AmplifyOpsArrow() {
+  return (
+    <svg
+      viewBox="0 0 200 200"
+      width="64"
+      height="64"
+      className="empty-state__icon"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="AmplifyOps"
+    >
+      <polygon points="10,60 185,18 110,195"  fill="#F8B62D" />
+      <polygon points="68,80 175,32 117,180"  fill="#F37021" />
+      <polygon points="108,100 158,60 130,160" fill="#C7281C" />
+    </svg>
+  )
+}
+
 function getEmptyMessage(filter) {
   switch (filter) {
-    case 'active':
-      return 'Nothing left to do. Nice work!'
-    case 'completed':
-      return 'No completed tasks yet.'
-    default:
-      return 'Your list is empty — add your first task above.'
+    case 'active':    return 'Nothing left to do. Nice work!'
+    case 'completed': return 'No completed tasks yet.'
+    default:          return 'Your list is empty — add your first task above.'
   }
 }
