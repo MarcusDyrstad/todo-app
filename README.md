@@ -1,6 +1,6 @@
-# Todo List — React + Vite
+# Todo List for Amplify
 
-A polished, accessible Todo List app with localStorage persistence. Built as a portfolio / internship submission piece to demonstrate clean component structure and modern React best practices.
+This is my attempt at a a polished, accessible Todo List app with localStorage persistence. Built as a portfolio / internship submission piece to demonstrate clean component structure and modern React best practices.
 
 ## Features
 
@@ -12,7 +12,7 @@ A polished, accessible Todo List app with localStorage persistence. Built as a p
 - Automatic localStorage persistence via a reusable custom hook
 - Responsive layout with automatic light / dark theming
 
-## Tech stack — and why
+## Tech stack
 
 | Tool | Why it was chosen |
 |------|-------------------|
@@ -65,7 +65,7 @@ npm run preview
 
 ## Deploying to GitHub Pages
 
-1. Create a new public repository on GitHub named **`todo-app`** (or anything you like — just update `base` in `vite.config.js` to match the repo name).
+1. Create a new public repository on GitHub named **`todo-app`**
 2. From the project folder:
    ```bash
    git init
