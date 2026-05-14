@@ -1,0 +1,11 @@
+<!--
+  AmplifyOps arrow only — used in the empty-state illustration.
+-->
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AmplifyOps">
+  <!-- Back: pale yellow-orange -->
+  <polygon points="10,60 185,18 110,195" fill="#F8B62D"/>
+  <!-- Middle: orange -->
+  <polygon points="68,80 175,32 117,180" fill="#F37021"/>
+  <!-- Front: deep red -->
+  <polygon points="108,100 158,60 130,160" fill="#C7281C"/>
+</svg>

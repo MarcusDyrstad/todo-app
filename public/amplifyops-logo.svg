@@ -1,0 +1,33 @@
+<!--
+  AmplifyOps full logo — arrow + wordmark.
+  Drawn in SVG so it stays crisp at any size and the "Amplify" text
+  uses currentColor (auto-adapts to light/dark mode).
+-->
+<svg viewBox="0 0 640 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AmplifyOps Federal">
+  <!-- ===== Arrow mark (three overlapping triangles) ===== -->
+  <g transform="translate(10,5)">
+    <!-- Back: pale yellow-orange -->
+    <polygon points="0,55 155,18 95,170" fill="#F8B62D"/>
+    <!-- Middle: orange -->
+    <polygon points="55,72 148,28 100,160" fill="#F37021"/>
+    <!-- Front: deep red -->
+    <polygon points="92,90 135,52 110,140" fill="#C7281C"/>
+  </g>
+
+  <!-- ===== "AmplifyOps" wordmark =====
+       "Amplify" uses currentColor (adapts to theme),
+       "Ops" stays orange to match the brand. -->
+  <text
+    x="200" y="105"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    font-size="78" font-weight="800" letter-spacing="-1">
+    <tspan fill="currentColor">Amplify</tspan><tspan fill="#F37021">Ops</tspan>
+  </text>
+
+  <!-- ===== "FEDERAL" subtitle ===== -->
+  <text
+    x="430" y="148"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    font-size="20" font-weight="500" letter-spacing="8"
+    fill="currentColor" opacity="0.55">FEDERAL</text>
+</svg>

@@ -3,17 +3,26 @@ import TodoItem from './TodoItem.jsx'
 /**
  * TodoList
  * --------
- * Receives the already-filtered list from the parent and renders it.
- * Shows a friendly empty state depending on which filter is active.
- *
- * Note: we use `todo.id` as the React key — never the array index —
- * so React can correctly identify rows across reorders/edits.
+ * Renders either the empty-state illustration or the filtered list.
+ * The empty state now uses the AmplifyOps arrow mark instead of ✨.
  */
-export default function TodoList({ todos, onToggle, onDelete, onEdit, filter }) {
+export default function TodoList({
+  todos,
+  onToggle,
+  onDelete,
+  onEdit,
+  onSetPriority,
+  filter,
+}) {
   if (todos.length === 0) {
     return (
       <div className="empty-state" role="status">
-        <p className="empty-state__icon" aria-hidden="true">✨</p>
+        <img
+          src={`${import.meta.env.BASE_URL}amplifyops-arrow.svg`}
+          alt=""
+          className="empty-state__icon"
+          aria-hidden="true"
+        />
         <p className="empty-state__text">{getEmptyMessage(filter)}</p>
       </div>
     )
@@ -28,13 +37,13 @@ export default function TodoList({ todos, onToggle, onDelete, onEdit, filter }) 
           onToggle={onToggle}
           onDelete={onDelete}
           onEdit={onEdit}
+          onSetPriority={onSetPriority}
         />
       ))}
     </ul>
   )
 }
 
-// Tiny helper kept outside the component so it isn't recreated each render.
 function getEmptyMessage(filter) {
   switch (filter) {
     case 'active':

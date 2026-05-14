@@ -1,22 +1,31 @@
 import { useEffect, useRef, useState } from 'react'
 
+// Cycle order for the click-to-cycle priority pill.
+const NEXT_PRIORITY = { low: 'medium', medium: 'high', high: 'low' }
+const PRIORITY_LABEL = { low: 'Low', medium: 'Med', high: 'High' }
+
 /**
  * TodoItem
  * --------
- * A single row in the list. Handles its own "is editing" mode locally,
- * but delegates persistence back up to the parent through callbacks.
- *
- * UX details:
- *   • Double-clicking the label switches to edit mode.
- *   • Enter confirms the edit; Escape cancels; blur also confirms.
- *   • The checkbox toggles completion state.
+ * One row in the list. Adds:
+ *   • a colored left-edge accent matching the task's priority
+ *   • a clickable priority pill (cycles low → medium → high → low)
+ * Edit mode is unchanged from the previous version.
  */
-export default function TodoItem({ todo, onToggle, onDelete, onEdit }) {
+export default function TodoItem({
+  todo,
+  onToggle,
+  onDelete,
+  onEdit,
+  onSetPriority,
+}) {
   const [isEditing, setIsEditing] = useState(false)
   const [draft, setDraft] = useState(todo.text)
   const inputRef = useRef(null)
 
-  // Focus + select the input when entering edit mode.
+  // Legacy todos created before priorities existed default to medium.
+  const priority = todo.priority ?? 'medium'
+
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus()
@@ -45,8 +54,10 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }) {
   }
 
   return (
-    <li className={`todo-item ${todo.completed ? 'is-completed' : ''}`}>
-      {/* Custom checkbox — uses a real <input type=checkbox> for a11y */}
+    <li
+      className={`todo-item ${todo.completed ? 'is-completed' : ''}`}
+      data-priority={priority}
+    >
       <label className="todo-item__check">
         <input
           type="checkbox"
@@ -77,6 +88,18 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }) {
           {todo.text}
         </span>
       )}
+
+      {/* Priority pill — click to cycle to the next level. */}
+      <button
+        type="button"
+        className="priority-badge"
+        data-priority={priority}
+        onClick={() => onSetPriority(todo.id, NEXT_PRIORITY[priority])}
+        title="Click to change priority"
+        aria-label={`Priority: ${PRIORITY_LABEL[priority]}. Click to change.`}
+      >
+        {PRIORITY_LABEL[priority]}
+      </button>
 
       <div className="todo-item__actions">
         {!isEditing && (

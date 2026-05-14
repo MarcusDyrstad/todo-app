@@ -1,10 +1,12 @@
 /* =========================================================
-   App-level layout + component styles.
-   All design tokens come from index.css for easy theming.
+   Component styles. All colors come from CSS variables defined
+   in index.css, so the dark-mode toggle works automatically.
    ========================================================= */
 
+/* ----- App layout -------------------------------------------------- */
+
 .app {
-  max-width: 640px;
+  max-width: 680px;
   margin: 0 auto;
   padding: 48px 20px 80px;
   display: flex;
@@ -13,25 +15,34 @@
 }
 
 .app__header {
+  position: relative;        /* anchor for the floating theme toggle */
   text-align: center;
   margin-bottom: 28px;
+  padding: 0 8px;
 }
 
-.app__title {
-  margin: 0;
-  font-size: clamp(2rem, 4vw + 1rem, 3rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--color-primary), #ec4899);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* AmplifyOps logo replaces the old gradient title text. */
+.app__logo {
+  display: block;
+  height: 64px;
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+  /* The SVG uses currentColor for "Amplify" text, so we pass
+     the theme's primary text color in via color. */
+  color: var(--color-text);
 }
 
 .app__subtitle {
-  margin: 8px 0 0;
+  margin: 10px 0 0;
   color: var(--color-text-muted);
   font-size: 0.95rem;
+}
+
+.app__theme-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .app__footer {
@@ -42,7 +53,45 @@
   font-size: 0.85rem;
 }
 
-/* ----- Card -------------------------------------------------------- */
+/* ----- Theme toggle ------------------------------------------------ */
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  transition: background var(--transition), border-color var(--transition),
+    transform var(--transition);
+}
+
+.theme-toggle:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.theme-toggle:active {
+  transform: scale(0.97);
+}
+
+.theme-toggle__label {
+  /* Show the label only on wider screens to keep the header tidy. */
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .theme-toggle__label {
+    display: inline;
+  }
+}
+
+/* ----- The white card --------------------------------------------- */
 
 .card {
   background: var(--color-surface);
@@ -55,7 +104,13 @@
   gap: 18px;
 }
 
-/* ----- Form -------------------------------------------------------- */
+/* ----- Form ------------------------------------------------------- */
+
+.todo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
 .todo-form__field {
   display: flex;
@@ -81,7 +136,7 @@
 
 .todo-form__input:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
 }
 
 .todo-form__submit {
@@ -108,12 +163,71 @@
 }
 
 .todo-form__error {
-  margin: 6px 2px 0;
+  margin: 0 2px;
   color: var(--color-danger);
   font-size: 0.85rem;
 }
 
-/* ----- Filter ------------------------------------------------------ */
+/* ----- Priority picker (inside the form) -------------------------- */
+
+.priority-picker {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.priority-picker__label {
+  margin-right: 4px;
+}
+
+/* A pill button — uses data-priority on the element to look up the color */
+.priority-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface-alt);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: background var(--transition), border-color var(--transition),
+    color var(--transition);
+}
+
+.priority-pill__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor; /* falls through from the [data-priority] color */
+}
+
+.priority-pill[data-priority='low']    { color: var(--priority-low); }
+.priority-pill[data-priority='medium'] { color: var(--priority-medium); }
+.priority-pill[data-priority='high']   { color: var(--priority-high); }
+
+.priority-pill.is-selected[data-priority='low'] {
+  background: var(--priority-low-soft);
+  border-color: var(--priority-low);
+}
+.priority-pill.is-selected[data-priority='medium'] {
+  background: var(--priority-medium-soft);
+  border-color: var(--priority-medium);
+}
+.priority-pill.is-selected[data-priority='high'] {
+  background: var(--priority-high-soft);
+  border-color: var(--priority-high);
+}
+
+.priority-pill:hover {
+  border-color: currentColor;
+}
+
+/* ----- Filter tabs ------------------------------------------------ */
 
 .todo-filter {
   display: flex;
@@ -162,7 +276,37 @@
   color: #fff;
 }
 
-/* ----- List + Item ------------------------------------------------- */
+/* ----- Sort dropdown --------------------------------------------- */
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.sort-controls__label {
+  color: var(--color-text-muted);
+}
+
+.sort-controls__select {
+  flex: 1;
+  padding: 6px 10px;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.sort-controls__select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* ----- List + rows ----------------------------------------------- */
 
 .todo-list {
   list-style: none;
@@ -174,15 +318,31 @@
 }
 
 .todo-item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 14px;
+  padding: 12px 14px 12px 18px;
   background: var(--color-surface-alt);
   border: 1px solid transparent;
   border-radius: var(--radius-md);
   transition: border-color var(--transition), background var(--transition);
+  overflow: hidden;
 }
+
+/* Colored left-edge accent driven by data-priority on the <li> */
+.todo-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--priority-medium);  /* default fallback */
+}
+.todo-item[data-priority='low']::before    { background: var(--priority-low); }
+.todo-item[data-priority='medium']::before { background: var(--priority-medium); }
+.todo-item[data-priority='high']::before   { background: var(--priority-high); }
 
 .todo-item:hover {
   border-color: var(--color-border);
@@ -193,6 +353,11 @@
   color: var(--color-text-muted);
 }
 
+.todo-item.is-completed::before {
+  opacity: 0.4;
+}
+
+/* Custom-styled checkbox */
 .todo-item__check {
   position: relative;
   display: inline-flex;
@@ -202,7 +367,6 @@
   cursor: pointer;
 }
 
-/* Visually hide the real checkbox but keep it accessible */
 .todo-item__check input {
   position: absolute;
   opacity: 0;
@@ -223,7 +387,7 @@
 }
 
 .todo-item__check input:focus-visible + .todo-item__checkmark {
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
 }
 
 .todo-item__check input:checked + .todo-item__checkmark {
@@ -255,6 +419,39 @@
   color: var(--color-text);
   outline: none;
 }
+
+/* ----- Priority badge (on each row) ------------------------------ */
+
+.priority-badge {
+  flex-shrink: 0;
+  padding: 2px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition: filter var(--transition), transform var(--transition);
+}
+
+.priority-badge[data-priority='low'] {
+  background: var(--priority-low-soft);
+  color: var(--priority-low);
+  border-color: var(--priority-low);
+}
+.priority-badge[data-priority='medium'] {
+  background: var(--priority-medium-soft);
+  color: var(--priority-medium);
+  border-color: var(--priority-medium);
+}
+.priority-badge[data-priority='high'] {
+  background: var(--priority-high-soft);
+  color: var(--priority-high);
+  border-color: var(--priority-high);
+}
+
+.priority-badge:hover { filter: brightness(1.08); }
+.priority-badge:active { transform: scale(0.95); }
 
 .todo-item__actions {
   display: flex;
@@ -292,7 +489,7 @@
   color: var(--color-danger);
 }
 
-/* ----- Stats ------------------------------------------------------- */
+/* ----- Stats ----------------------------------------------------- */
 
 .todo-stats {
   display: flex;
@@ -327,24 +524,29 @@
   cursor: not-allowed;
 }
 
-/* ----- Empty state ------------------------------------------------- */
+/* ----- Empty state ----------------------------------------------- */
 
 .empty-state {
   text-align: center;
-  padding: 32px 12px;
+  padding: 28px 12px 18px;
   color: var(--color-text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .empty-state__icon {
-  margin: 0;
-  font-size: 2rem;
+  width: 56px;
+  height: 56px;
+  opacity: 0.9;
 }
 
 .empty-state__text {
-  margin: 6px 0 0;
+  margin: 0;
 }
 
-/* ----- Mobile tweaks ---------------------------------------------- */
+/* ----- Mobile tweaks -------------------------------------------- */
 
 @media (max-width: 480px) {
   .app {
@@ -355,5 +557,12 @@
   }
   .todo-filter__btn {
     font-size: 0.9rem;
+  }
+  .app__logo {
+    height: 48px;
+  }
+  .priority-badge {
+    padding: 2px 8px;
+    font-size: 0.66rem;
   }
 }

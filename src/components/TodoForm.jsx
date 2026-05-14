@@ -1,30 +1,35 @@
 import { useState } from 'react'
 
+// Priority options shown as a 3-pill button group inside the form.
+const PRIORITIES = [
+  { value: 'low',    label: 'Low' },
+  { value: 'medium', label: 'Med' },
+  { value: 'high',   label: 'High' },
+]
+
 /**
  * TodoForm
  * --------
- * Controlled <input> + submit button. Pure presentational component:
- * it doesn't know about localStorage or the global todos array — it
- * just calls `onAdd(text)` and clears itself on success.
- *
- * Props:
- *   onAdd(text) -> boolean — return true if the parent accepted the input
- *   error       -> string  — current validation error, if any
- *   clearError  -> ()      — called when the user starts typing again
+ * Controlled input + priority picker + Add button.
+ * onAdd is called with (text, priority); App validates the text.
  */
 export default function TodoForm({ onAdd, error, clearError }) {
   const [value, setValue] = useState('')
+  const [priority, setPriority] = useState('medium') // default — most tasks
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Parent decides if the input is valid; if so, we clear the field.
-    const ok = onAdd(value)
-    if (ok) setValue('')
+    const ok = onAdd(value, priority)
+    if (ok) {
+      setValue('')
+      // Note: we intentionally keep the priority pill where it is,
+      // so adding several "high"-priority tasks in a row is fast.
+    }
   }
 
   const handleChange = (e) => {
     setValue(e.target.value)
-    if (error) clearError() // Hide the error as soon as they fix it.
+    if (error) clearError()
   }
 
   return (
@@ -50,7 +55,29 @@ export default function TodoForm({ onAdd, error, clearError }) {
           Add
         </button>
       </div>
-      {/* Inline error message — accessible via aria-describedby */}
+
+      {/* Priority picker — three small pills, one for each level. */}
+      <div className="priority-picker" role="radiogroup" aria-label="Priority">
+        <span className="priority-picker__label">Priority:</span>
+        {PRIORITIES.map(({ value: v, label }) => {
+          const selected = priority === v
+          return (
+            <button
+              key={v}
+              type="button"
+              role="radio"
+              aria-checked={selected}
+              data-priority={v}
+              className={`priority-pill ${selected ? 'is-selected' : ''}`}
+              onClick={() => setPriority(v)}
+            >
+              <span className="priority-pill__dot" aria-hidden="true" />
+              {label}
+            </button>
+          )
+        })}
+      </div>
+
       {error && (
         <p id="todo-form-error" className="todo-form__error" role="alert">
           {error}
